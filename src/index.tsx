@@ -3,13 +3,20 @@ import ReactDOM from "react-dom/client";
 
 import App from "./app/App";
 import GlobalStyle from "./app/GlobalStyle";
+import { AuthErrorEventBus, AuthProvider } from "./context/AuthContext";
 import reportWebVitals from "./reportWebVitals";
+import AuthService from "./service/auth.service";
+
+const authErrorEventBus = new AuthErrorEventBus();
+const authService = new AuthService();
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
 	<React.StrictMode>
 		<GlobalStyle />
-		<App />
+		<AuthProvider authService={authService} authErrorEventBus={authErrorEventBus}>
+			<App />
+		</AuthProvider>
 	</React.StrictMode>
 );
 

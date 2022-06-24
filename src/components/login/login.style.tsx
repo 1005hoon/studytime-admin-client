@@ -60,6 +60,6 @@ export const StyledLoginButtonImg = styled.img`
 	transform: translateY(20%);
 `;
 
-export const StyledLoginFormGoogle = styled(StyledLoginButton)``;
-export const StyledLoginFormKakao = styled(StyledLoginButton)``;
+export const StyledGoogleLoginButton = styled(StyledLoginButton)``;
+export const StyledKakaoLoginButton = styled(StyledLoginButton)``;
 export const StyledLoginFormFooter = styled.footer``;

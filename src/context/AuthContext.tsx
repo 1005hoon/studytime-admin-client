@@ -9,12 +9,17 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { OAuthProvider } from "../model/types";
 import User from "../model/User";
 import LoginPage from "../pages/LoginPage";
 import AuthService from "../service/auth.service";
 
-type State = { user: User | undefined; logIn: () => Promise<void>; logOut: () => Promise<void> };
-const AuthContext = createContext<State>({ user: undefined, logIn: async () => {}, logOut: async () => {} });
+type State = { user: User | undefined; logIn: (provider: OAuthProvider) => Promise<void>; logOut: () => Promise<void> };
+const AuthContext = createContext<State>({
+	user: undefined,
+	logIn: async (provider: OAuthProvider) => {},
+	logOut: async () => {},
+});
 const contextRef = createRef();
 
 export function AuthProvider({
@@ -58,14 +63,17 @@ export function AuthProvider({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isLoggedIn]);
 
-	const logIn = useCallback(async () => {
-		try {
-			const user = await authService.login();
-			setUser(user);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [authService]);
+	const logIn = useCallback(
+		async (provider: OAuthProvider) => {
+			try {
+				const user = await authService.login(provider);
+				setUser(user);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		[authService]
+	);
 
 	const logOut = useCallback(async () => {
 		await authService.logout();
@@ -81,7 +89,11 @@ export function AuthProvider({
 		[user, logIn, logOut]
 	);
 
-	return <AuthContext.Provider value={context}>{user ? children : <LoginPage />}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={context}>
+			{user ? children : <LoginPage authService={authService} />}
+		</AuthContext.Provider>
+	);
 }
 
 export class AuthErrorEventBus {

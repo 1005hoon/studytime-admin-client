@@ -10,6 +10,7 @@ import {
 	useState,
 } from "react";
 import User from "../model/User";
+import LoginPage from "../pages/LoginPage";
 import AuthService from "../service/auth.service";
 
 type State = { user: User | undefined; logIn: () => Promise<void>; logOut: () => Promise<void> };
@@ -80,17 +81,7 @@ export function AuthProvider({
 		[user, logIn, logOut]
 	);
 
-	return (
-		<AuthContext.Provider value={context}>
-			{user ? (
-				children
-			) : (
-				<div>
-					<h1>Login Page</h1>
-				</div>
-			)}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={context}>{user ? children : <LoginPage />}</AuthContext.Provider>;
 }
 
 export class AuthErrorEventBus {

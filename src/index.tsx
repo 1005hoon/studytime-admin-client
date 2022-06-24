@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ThemeProvider } from "styled-components";
 
 import App from "./app/App";
-import GlobalStyle from "./app/GlobalStyle";
+import GlobalStyle, { theme } from "./app/GlobalStyle";
 import { AuthErrorEventBus, AuthProvider } from "./context/AuthContext";
 import reportWebVitals from "./reportWebVitals";
 import AuthService from "./service/auth.service";
@@ -13,10 +14,12 @@ const authService = new AuthService();
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
 	<React.StrictMode>
-		<GlobalStyle />
-		<AuthProvider authService={authService} authErrorEventBus={authErrorEventBus}>
-			<App />
-		</AuthProvider>
+		<ThemeProvider theme={theme}>
+			<GlobalStyle />
+			<AuthProvider authService={authService} authErrorEventBus={authErrorEventBus}>
+				<App />
+			</AuthProvider>
+		</ThemeProvider>
 	</React.StrictMode>
 );
 
